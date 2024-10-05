@@ -30,16 +30,16 @@ class Model:
         self.df = self.df[[textColumn, sentimentColumn]]
 
         #Quanitify sentiment data
-        def quantify_sentiment(col):
-            if col == posLabel:
+        def quantify_sentiment(a_col):
+            if a_col == posLabel:
                 return 1.0
-            elif col == negLabel:
+            elif a_col == negLabel:
                 return 0.0
             else:
                 return 0.5
         
         #Transform ratings into the correct format (0.0-1.0)
-        def transform_numeric_ratings(col):
+        #def transform_numeric_ratings(a_col):
             
             
         #Is sentimentColumn already comprised of numbers? If not, change that!
@@ -47,9 +47,9 @@ class Model:
             self.df[sentimentColumn] = self.df[sentimentColumn].apply(quantify_sentiment)
         
         #Remove Usernames with @ from the text data 
-        def remove_usernames(col):
-            string = col
-            usernamesAndHashtags = re.findall(r"(@\w+|#\w+)", col)
+        def remove_usernames(a_col):
+            string = a_col
+            usernamesAndHashtags = re.findall(r"(@\w+|#\w+)", a_col)
             for uAndH in usernamesAndHashtags:
                 string = string.replace(uAndH, "")
             
