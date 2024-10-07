@@ -30,7 +30,7 @@ class Model:
 
 
     #Constructor
-    def __init__(self, a_datasetChoice, a_modelType, a_textColumn, a_sentimentColumn, posLabel, negLabel, neutLabel):
+    def __init__(self, a_datasetChoice, a_modelType, a_textColumn, a_sentimentColumn, posLabel = "positive", negLabel = "negative", neutLabel = "neutral"):
         self.datasetChoice = a_datasetChoice
         self.modelType = a_modelType
         self.df = pd.read_csv(f"{a_datasetChoice}.csv")
@@ -73,10 +73,28 @@ class Model:
         textToPredict_vec = self.vectorizer.transform(textToPredict)
         return self.model.predict(textToPredict_vec)
 
+    def balance(self, a_sentimentColumn, posLabel = "positive", negLabel = "negative", neutLabel = "neutral"):
+        print(self.df)
+        nums = {"neutral": len(self.df[self.df[a_sentimentColumn] == neutLabel].index), "positive": len(self.df[self.df[a_sentimentColumn] == posLabel].index), "negative": len(self.df[self.df[a_sentimentColumn] == negLabel].index)}
+        indices = {"neutral": self.df[self.df[a_sentimentColumn] == neutLabel].index, "positive": self.df[self.df[a_sentimentColumn] == posLabel].index, "negative": self.df[self.df[a_sentimentColumn] == negLabel].index}
+        dfs = {"neutral": pd.DataFrame(self.df.loc[indices["neutral"]]), "positive": pd.DataFrame(self.df.loc[indices["positive"]]), "negative": pd.DataFrame(self.df.loc[indices["negative"]])}
+
+        print(nums)
+        print(min(nums.values()))
+        for key in nums.keys():
+            print(nums[key])
+            remove_n = -(min(nums.values()) - nums[key])
+            print(f"remove_n: {remove_n}")
+            if remove_n != 0:
+                drop_indices = np.random.choice(indices[key], remove_n, replace=False)
+                dfs[key] = dfs[key].drop(drop_indices)
+        print(pd.concat([dfs[posLabel], dfs[neutLabel], dfs[negLabel]]))
+        return pd.concat([dfs[posLabel], dfs[neutLabel], dfs[negLabel]])
+    
     #Get info for the current dataset
     #def getDatasetInfo(self):
         
-    def autoCleaner(self, a_textColumn, a_sentimentColumn, posLabel="", negLabel="", neutLabel=""):
+    def autoCleaner(self, a_textColumn, a_sentimentColumn, posLabel = "positive", negLabel = "negative", neutLabel = "neutral"):
         self.df = self.df[[a_textColumn, a_sentimentColumn]]
 
         if is_numeric_dtype(self.df[a_sentimentColumn]):
@@ -93,9 +111,9 @@ class Model:
 
             def numeric_to_categorical(a_col):
                 #print(f"a_col: {a_col}, max: {max}, min: {min}, a_col
-                if a_col == max or a_col / max > 0.7:
+                if a_col == max or a_col / max >= 0.7:
                     return "positive"
-                elif a_col == min or a_col / max < 0.4:
+                elif a_col == min or a_col / max <= 0.4:
                     return "negative"
                 else:
                     return "neutral"
@@ -122,7 +140,6 @@ class Model:
         self.df[a_sentimentColumn] = self.df[a_sentimentColumn].apply(drop_not_in_labels)
         self.df[a_textColumn] = self.df[a_textColumn].apply(remove_not_str)
         self.df = self.df.dropna()
-        
         #Transform ratings into the correct format (0.0-1.0)
         #def transform_numeric_ratings(a_col):
             
@@ -159,11 +176,12 @@ class Model:
         
         self.df[a_textColumn] = self.df[a_textColumn].apply(clean_text)
         self.df[a_textColumn] = self.df[a_textColumn].apply(remove_stopwords)
+        self.df = self.balance(a_sentimentColumn, posLabel, negLabel, neutLabel)
         return self.df
         print(self.df.head())
         print(self.df.tail())
 
-model = Model("HotelReviews", "LogisticRegression", "reviews.text", "reviews.rating", "", "", "")
+model = Model("DrugReviews", "LogisticRegression", "review", "rating")
 print(model.predict("This is awful"))
 model.y_pred = model.model.predict(model.x_test_vec)
 accuracy = accuracy_score(model.y_test, model.y_pred)
