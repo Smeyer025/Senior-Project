@@ -1,3 +1,8 @@
+/* 
+HTML styling
+Overview: 
+  Background image: Covers whole background
+*/
 html {
   background-image: url("assets/bg.png");
   background-repeat: no-repeat;

@@ -1,3 +1,10 @@
+/*
+Header styling
+Overview:
+    Text: aligned in the center
+    Container: padded, centered, rounded blackborder, 
+               black shadow projected 
+*/
 header 
 {
     text-align: center;
@@ -13,6 +20,11 @@ header
     border-width: 1px;
 }
 
+/*
+Header text styling
+Overview:
+    Text: 50px font, black text
+*/
 header h1 
 {
     font-size: 50px;

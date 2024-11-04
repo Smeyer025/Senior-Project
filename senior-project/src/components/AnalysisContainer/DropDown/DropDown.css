@@ -1,3 +1,8 @@
+/*
+select styling
+Overview:
+    No border, white background
+*/
 select {
     border-style: none;
     background-color: #ffffff;

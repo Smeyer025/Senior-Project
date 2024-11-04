@@ -1,3 +1,8 @@
+##############################################################
+# Model Class - Allows users to create machine learning      #
+#               models on the fly based on chosen parameters #
+##############################################################
+
 import numpy as np
 import pandas as pd
 import matplotlib as plt
@@ -26,16 +31,52 @@ class Model:
     x_test_vec = ""
     y_pred = ""
 
+    """
+    Model::__init__()
 
-    #Constructor
-    def __init__(self, a_datasetChoice, a_modelType, a_textColumn, a_sentimentColumn, a_posLabel = "positive", a_negLabel = "negative", a_neutLabel = "neutral"):
+    NAME
+        Model::__init__() - Constructor for Model Class
+    
+    SYNOPSIS
+        void __init__(self, a_datasetChoice, a_modelType, a_textColumn, a_sentimentColumn, a_posLabel, a_negLabel, a_neutLabel, a_balance)
+            self              --> Required first parameter for any Python class function/constructor: the object being created/operated on
+            a_datasetChoice   --> Dataset chosen for the model
+            a_modelType       --> Model type chosen for the model
+            a_textColumn      --> Column in dataset containing text corresponding to sentiment rating
+            a_sentimentColumn --> Column in dataset containing sentiment rating corresponding to text
+            a_posLabel        --> Label denoting positive tone
+            a_negLabel        --> Label denoting negative tone
+            a_neutLabel       --> Label denoting neutral tone
+            a_balance         --> Boolean containing whether or not the dataset should be balanced as part of data cleaning
+
+    DESCRIPTION
+        This constructor takes in all necessary information for the data to be cleaned and for the model to be created,
+        assigns all necessary member variables, and runs the autoCleaner and generateModel functions.
+    """
+    def __init__(self, a_datasetChoice, a_modelType, a_textColumn, a_sentimentColumn, a_posLabel = "positive", a_negLabel = "negative", a_neutLabel = "neutral", a_balance = False):
         self.datasetChoice = a_datasetChoice
         self.modelType = a_modelType
         self.df = pd.read_csv(f"{a_datasetChoice}.csv")
-        self.autoCleaner(a_textColumn, a_sentimentColumn, a_posLabel, a_negLabel, a_neutLabel)
+        self.autoCleaner(a_textColumn, a_sentimentColumn, a_posLabel, a_negLabel, a_neutLabel, a_balance)
         self.generateModel(a_textColumn, a_sentimentColumn)
 
-    #Generate model based on type of model chosen and dataset chosen
+    """
+    Model::generateModel()
+
+    NAME
+        Model::generateModel() - Function that handles ML model generation
+    
+    SYNOPSIS
+        void generateModel(self, a_textColumn, a_sentimentColumn)
+            self              --> Required first parameter for any Python class function/constructor. The object being created/operated on 
+            a_textColumn      --> Column in dataset containing text corresponding to sentiment rating
+            a_sentimentColumn --> Column in dataset containing sentiment rating corresponding to text
+
+    DESCRIPTION
+        This function takes in the names of the text and sentiment columns, splits those into two separate series x and y,
+        splits the data into training and test data, uses a count vectorizer to determine the value of the different words
+        present in the text, and creates a model based on whichever model type is chosen in the constructor.
+    """
     def generateModel(self, a_textColumn, a_sentimentColumn):
         #Split data into x and y values for Model
         x = self.df[a_textColumn]
@@ -59,17 +100,53 @@ class Model:
         elif self.modelType == "RandomForest":
             #Implement Later
             self.model = "random forest"
-        elif self.model == "KMeansClustering":
+        elif self.model == "KNearestNeighbors":
             #Implement Later
-            self.model = "KMeansClustering"
+            self.model = "KNearestNeighbors"
         else:
             self.model = "UNSUPPORTED MODEL TYPE"
         
-    def predict(self, textToPredict):
-        textToPredict = [textToPredict]
-        textToPredict_vec = self.vectorizer.transform(textToPredict)
+    """
+    Model::predict()
+
+    NAME
+        Model::predict() - Function that takes in text to predict and returns the model's prediction 
+                           of that text's sentiment.
+    
+    SYNOPSIS
+        String predict(self, a_textToPredict)
+            self              --> Required first parameter for any Python class function/constructor. The object being created/operated on 
+            a_textToPredict   --> Text to be predicted
+
+    DESCRIPTION
+        This function takes in the text whose sentiment is to be predicted, fits it to the vectorizer 
+        created in the constructor, uses the model to predict the text's sentiment, and returns that prediction.
+    """
+    def predict(self, a_textToPredict):
+        a_textToPredict = [a_textToPredict]
+        textToPredict_vec = self.vectorizer.transform(a_textToPredict)
         return list(self.model.predict(textToPredict_vec))
 
+    """
+    Model::balance()
+
+    NAME
+        Model::balance() - Function that balances the spread of data in the dataset
+    
+    SYNOPSIS
+        DataFrame balance(self, a_sentimentColumn, a_posLabel = "positive", a_negLabel = "negative", a_neutLabel = "neutral")
+            self              --> Required first parameter for any Python class function/constructor: the object being created/operated on
+            a_sentimentColumn --> Column in dataset containing sentiment rating corresponding to text
+            a_posLabel        --> Label denoting positive tone
+            a_negLabel        --> Label denoting negative tone
+            a_neutLabel       --> Label denoting neutral tone
+
+    DESCRIPTION
+        This function takes in the sentiment column, the positive label, the negative label, and the neutral
+        label, finds whichever of the three has the least prevalence in the dataset, and randomly 
+        removes features with the other two sentiments until all three have the same amount of features
+        in the dataset. The new dataset, with the balanced spread, is returned.
+    """
     def balance(self, a_sentimentColumn, a_posLabel = "positive", a_negLabel = "negative", a_neutLabel = "neutral"):
         nums = {"neutral": len(self.df[self.df[a_sentimentColumn] == a_neutLabel].index), "positive": len(self.df[self.df[a_sentimentColumn] == a_posLabel].index), "negative": len(self.df[self.df[a_sentimentColumn] == a_negLabel].index)}
         indices = {"neutral": self.df[self.df[a_sentimentColumn] == a_neutLabel].index, "positive": self.df[self.df[a_sentimentColumn] == a_posLabel].index, "negative": self.df[self.df[a_sentimentColumn] == a_negLabel].index}
@@ -81,11 +158,41 @@ class Model:
                 drop_indices = np.random.choice(indices[key], remove_n, replace=False)
                 dfs[key] = dfs[key].drop(drop_indices)
         return pd.concat([dfs[a_posLabel], dfs[a_neutLabel], dfs[a_negLabel]])
-    
-    #Get info for the current dataset
-    #def getDatasetInfo(self):
         
-    def autoCleaner(self, a_textColumn, a_sentimentColumn, a_posLabel = "positive", a_negLabel = "negative", a_neutLabel = "neutral"):
+    """
+    Model::autoCleaner()
+
+    NAME
+        Model::autoCleaner() - Function that cleans the data for model generation
+    
+    SYNOPSIS
+        DataFrame autoCleaner(self, a_textColumn, a_sentimentColumn, a_posLabel = "positive", a_negLabel = "negative", a_neutLabel = "neutral", a_balance = False)
+            self              --> Required first parameter for any Python class function/constructor: the object being created/operated on
+            a_textColumn      --> Column in dataset containing text corresponding to sentiment rating
+            a_sentimentColumn --> Column in dataset containing sentiment rating corresponding to text
+            a_posLabel        --> Label denoting positive tone
+            a_negLabel        --> Label denoting negative tone
+            a_neutLabel       --> Label denoting neutral tone
+            a_balance         --> Boolean containing whether or not the dataset should be balanced as part of data cleaning
+
+    DESCRIPTION
+        This function takes in the text column, the sentiment column, the labels names, and whether or not 
+        the data should be balanced, and cleans the data. Steps to data cleaning are:
+            1. Drop all columns except for the text column and the sentiment column
+            2. Check the sentiment column's dataset data type. If numeric, convert to categorical
+               by identifying the minimum and maximum in the range of the column, assigning negative
+               to the bottom 33%, neutral to text between 34% and 66%, and positive to the top 33%.
+               If data has been updated in this way, assign "positive" to a_posLabel, "negative" to
+               a_negLabel, and "neutral" to a_neutLabel.
+            3. Drop any features with sentiment labels not matching a_posLabel, a_negLabel, or a_neutLabel.
+            4. Drop any features with non-string data in the text column
+            5. Remove any hashtags (words starting with '#') or usernames (words starting with '@')
+            6. Remove any words with non-alphanumeric characters
+            7. Remove stopwords (common toneless words such as I, are, they, etc.).
+            8. If specified in a_balance, balance dataset
+        Returns self.df
+    """
+    def autoCleaner(self, a_textColumn, a_sentimentColumn, a_posLabel = "positive", a_negLabel = "negative", a_neutLabel = "neutral", a_balance = False):
         self.df = self.df[[a_textColumn, a_sentimentColumn]]
 
         if is_numeric_dtype(self.df[a_sentimentColumn]):
@@ -101,9 +208,9 @@ class Model:
                 max = max + distToOne
 
             def numeric_to_categorical(a_col):
-                if a_col == max or a_col / max >= 0.7:
+                if a_col == max or a_col / max >= 0.67:
                     return "positive"
-                elif a_col == min or a_col / max <= 0.4:
+                elif a_col == min or a_col / max <= 0.33:
                     return "negative"
                 else:
                     return "neutral"
@@ -159,14 +266,32 @@ class Model:
         
         self.df[a_textColumn] = self.df[a_textColumn].apply(clean_text)
         self.df[a_textColumn] = self.df[a_textColumn].apply(remove_stopwords)
-        self.df = self.balance(a_sentimentColumn, a_posLabel, a_negLabel, a_neutLabel)
+        if a_balance:
+            self.df = self.balance(a_sentimentColumn, a_posLabel, a_negLabel, a_neutLabel)
         return self.df
+    
+    """
+    Model::test()
 
-# model = Model("SocialMedia", "LogisticRegression", "clean_text", "category")
-# print(model.predict("This is awful"))
-# model.y_pred = model.model.predict(model.x_test_vec)
-# accuracy = accuracy_score(model.y_test, model.y_pred)
-# print("accuracy", accuracy)
-# heatmap = sns.heatmap(confusion_matrix(model.y_test,model.y_pred))
-# fig = heatmap.get_figure()
-# fig.savefig("out.png")
+    NAME
+        Model::test() - Test function for the model class
+    
+    SYNOPSIS
+        String test(self, a_textToPredict)
+            self              --> Required first parameter for any Python class function/constructor. The object being created/operated on 
+            a_textToPredict   --> Text to be predicted
+
+    DESCRIPTION
+        This function  takes in text to predict, generates a model, runs and prints a prediction on 
+        the inputted text, outputs information about the model, and creates and saves a heatmap
+        of the model's confusion matrix.
+    """
+    def test(self, a_textToPredict):
+        model = Model("SocialMedia", "LogisticRegression", "clean_text", "category")
+        print(model.predict(a_textToPredict))
+        model.y_pred = model.model.predict(model.x_test_vec)
+        accuracy = accuracy_score(model.y_test, model.y_pred)
+        print("accuracy", accuracy)
+        heatmap = sns.heatmap(confusion_matrix(model.y_test,model.y_pred))
+        fig = heatmap.get_figure()
+        fig.savefig("out.png")
