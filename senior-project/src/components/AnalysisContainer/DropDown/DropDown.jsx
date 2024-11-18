@@ -3,6 +3,7 @@
  */
 
 import "./DropDown.css";
+import { useState } from 'react';
 
 /**
  * DropDown()
@@ -22,7 +23,7 @@ import "./DropDown.css";
  */
 export default function DropDown(props) {
     return (
-        <select class="inline" name={props.type} >
+        <select value={props.value} name={props.type} onChange={props.onChange} className="inline">
             {props.type === "Model" ? Models.map((item) => <option>{item}</option>) : Datasets.map((item) => <option>{item}</option>)}
         </select>
     );

@@ -17,8 +17,8 @@ import "./InputArea.css";
  *    This function exports the text box that the user
  *    will enter the text they want to be analyzed in.
  */
-export default function InputArea() {
+export default function InputArea(props) {
     return (
-        <textarea rows="5">Enter your text here</textarea>
+        <textarea rows="5" value={props.value} onChange={props.onChange}></textarea>
     );
 }

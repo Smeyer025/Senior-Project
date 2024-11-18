@@ -17,8 +17,8 @@
  *    This function exports the button that triggers the 
  *    analysis based on chosen parameters and inputted text
  */
-export default function SubmitButton() {
+export default function SubmitButton(props) {
     return (
-        <button class="inline">Submit</button>
+        <button onClick={props.onClick} className="inline">Submit</button>
     );
 }
