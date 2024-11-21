@@ -32,8 +32,9 @@ export default function DropDown(props) {
 const Models = [
     "Logistic Regression",
     "Support Vector Machine",
-    "Random Forest/Decision Trees",
-    "Naïve Bayes"
+    "Random Forest",
+    "K Nearest Neighbors",
+    "Voting Classifier"
 ];
 
 const Datasets = [

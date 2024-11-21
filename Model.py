@@ -16,6 +16,10 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score,classification_report
 from sklearn.metrics import confusion_matrix
+from sklearn import svm
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import VotingClassifier
+from sklearn.neighbors import KNeighborsClassifier
 
 class Model:
     datasetChoice = ""
@@ -90,19 +94,31 @@ class Model:
         self.x_train_vec = self.vectorizer.fit_transform(self.x_train)
         self.x_test_vec = self.vectorizer.transform(self.x_test)
 
+        print("modelType: " + self.modelType)
+
         #Generate Model based on what was entered and fit it to the training data
         if self.modelType == "LogisticRegression":
             self.model = LogisticRegression(max_iter=350)
             self.model.fit(self.x_train_vec, self.y_train)
         elif self.modelType == "SupportVectorMachine":
             #Implement Later
-            self.model = "svm"
+            self.model = svm.SVC()
+            self.model.fit(self.x_train_vec, self.y_train)
         elif self.modelType == "RandomForest":
             #Implement Later
-            self.model = "random forest"
-        elif self.model == "KNearestNeighbors":
+            self.model = RandomForestClassifier(n_estimators=100, random_state=42)
+            self.model.fit(self.x_train_vec, self.y_train)
+        elif self.modelType == "KNearestNeighbors":
             #Implement Later
-            self.model = "KNearestNeighbors"
+            self.model = KNeighborsClassifier(n_neighbors=3)
+            self.model.fit(self.x_train_vec, self.y_train)
+        elif self.modelType == "VotingClassifier":
+            lr = LogisticRegression(max_iter=350)
+            svc = svm.SVC()
+            rf = RandomForestClassifier(n_estimators=100, random_state=42)
+            KNN = KNeighborsClassifier(n_neighbors=3)
+            self.model = VotingClassifier(estimators=[('lr', lr), ('svc', svc), ('rf', rf), ('knn', KNN)])
+            self.model.fit(self.x_train_vec, self.y_train)
         else:
             self.model = "UNSUPPORTED MODEL TYPE"
         
@@ -125,7 +141,7 @@ class Model:
     def predict(self, a_textToPredict):
         a_textToPredict = [a_textToPredict]
         textToPredict_vec = self.vectorizer.transform(a_textToPredict)
-        return self.model.predict(textToPredict_vec)
+        return list(self.model.predict(textToPredict_vec))
 
     """
     Model::balance()

@@ -7,7 +7,7 @@ import Model
 
 class Analyzer:
     DATASETS = ["SocialMedia", "AirlineReviews", "DrugReviews", "HotelReviews", "MovieReviews"]
-    MODEL_TYPES = ["LogisticRegression", "SupportVectorMachine", "RandomForest", "KNearestNeighbors"]
+    MODEL_TYPES = ["LogisticRegression", "SupportVectorMachine", "RandomForest", "KNearestNeighbors", "VotingClassifier"]
     currModel = ""
     currDataset = ""
     currModelType = ""
