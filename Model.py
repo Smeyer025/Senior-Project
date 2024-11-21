@@ -125,7 +125,7 @@ class Model:
     def predict(self, a_textToPredict):
         a_textToPredict = [a_textToPredict]
         textToPredict_vec = self.vectorizer.transform(a_textToPredict)
-        return list(self.model.predict(textToPredict_vec))
+        return self.model.predict(textToPredict_vec)
 
     """
     Model::balance()
