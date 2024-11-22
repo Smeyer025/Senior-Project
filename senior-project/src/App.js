@@ -4,7 +4,8 @@
 
 import Header from "./components/Header/Header";
 import AnalysisContainer from "./components/AnalysisContainer/AnalysisContainer";
-import OutputContainer from "./components/OutputContainer/OutputContainer";
+import MenuContainer from "./components/MenuContainer/MenuContainer";
+import bgpng from './assets/bg.png';
 
 /**
  * App()
@@ -21,12 +22,13 @@ import OutputContainer from "./components/OutputContainer/OutputContainer";
  */
 function App() {
   return (
-    <>
+    <html>
       <Header>
         Sentiment Analysis
       </Header>
       <AnalysisContainer />
-    </>
+      <MenuContainer />
+    </html>
   );
 }
 

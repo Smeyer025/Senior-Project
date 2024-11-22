@@ -19,6 +19,6 @@
  */
 export default function SubmitButton(props) {
     return (
-        <button onClick={props.onClick} className="inline">Submit</button>
+        <button onClick={props.onClick} className="inline">{props.children}</button>
     );
 }

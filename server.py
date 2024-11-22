@@ -8,11 +8,6 @@ app = Flask(__name__)
 
 CORS(app)
 
-@app.route('/server')
-def predict():
-    a = Analyzer("SocialMedia", "LogisticRegression", "clean_text", "category")
-    return a.predict("I love this product!")
-
 @app.route('/predict')
 def predictText():
     datasetChoice = request.args.get('datasetChoice')

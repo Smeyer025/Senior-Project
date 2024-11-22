@@ -2,7 +2,7 @@
  * AnalysisContainer Component: Container for input elements
  */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import "./AnalysisContainer.css";
 import InputArea from "./InputArea/InputArea";
 import DropDown from "./DropDown/DropDown";
@@ -73,7 +73,8 @@ export default function AnalysisContainer() {
                 <InputArea value={text} onChange={handleInput}></InputArea>
                 <DropDown value={selectedValue1} type="Model" onChange={handleChange1}></DropDown>
                 <DropDown value={selectedValue2} type="Dataset" onChange={handleChange2}></DropDown>
-                <SubmitButton onClick={handleClick} />
+                <SubmitButton>Import Dataset</SubmitButton>
+                <SubmitButton onClick={handleClick}>Submit</SubmitButton>
             </div>
             <OutputContainer>{output}</OutputContainer>
         </>
