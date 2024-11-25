@@ -8,6 +8,7 @@ import Model
 class Analyzer:
     DATASETS = ["SocialMedia", "AirlineReviews", "DrugReviews", "HotelReviews", "MovieReviews"]
     MODEL_TYPES = ["LogisticRegression", "SupportVectorMachine", "RandomForest", "KNearestNeighbors", "VotingClassifier"]
+    importedDatasetColumns = {}
     currModel = ""
     currDataset = ""
     currModelType = ""

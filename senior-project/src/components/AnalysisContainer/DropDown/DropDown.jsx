@@ -24,23 +24,7 @@ import { useState } from 'react';
 export default function DropDown(props) {
     return (
         <select value={props.value} name={props.type} onChange={props.onChange} className="inline">
-            {props.type === "Model" ? Models.map((item) => <option>{item}</option>) : Datasets.map((item) => <option>{item}</option>)}
+            {props.list.map((item) => <option>{item}</option>)}
         </select>
     );
 }
-
-const Models = [
-    "Logistic Regression",
-    "Support Vector Machine",
-    "Random Forest",
-    "K Nearest Neighbors",
-    "Voting Classifier"
-];
-
-const Datasets = [
-    "Airline Reviews",
-    "Drug Reviews",
-    "Hotel Reviews",
-    "Movie Reviews",
-    "Social Media"
-];

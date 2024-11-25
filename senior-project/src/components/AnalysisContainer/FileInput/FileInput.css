@@ -1,0 +1,7 @@
+.inline {
+    border-style: solid;
+    border-radius: 6px;
+    background-color: #ffffff;
+    width: 25%;
+    height: 1.5rem;
+}
