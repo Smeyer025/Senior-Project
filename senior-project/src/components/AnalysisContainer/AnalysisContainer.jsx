@@ -38,7 +38,9 @@ var Datasets = [
  * DESCRIPTION
  *    This function exports the layout for the elements
  *    that contribute to text analysis: the text input area,
- *    the model dropdown menu, the dataset dropdown menu,
+ *    the model dropdown menu, the dataset dropdown menu, the
+ *    input element that takes in an uploaded file, the button
+ *    that triggers the import and makes the new dataset available
  *    and the submit button
  */
 export default function AnalysisContainer() {    

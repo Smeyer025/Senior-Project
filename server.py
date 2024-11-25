@@ -13,6 +13,30 @@ app.secret_key = "ei3r988fe98j2nu90f90ioncxjnjwnljowdjoi"
 
 CORS(app)
 
+"""
+upload()
+
+NAME
+    upload() - function for handling file uploads
+
+SYNOPSIS
+    Response upload()
+        HTTP args:
+            file            --> File received from frontend
+            textColumn      --> Label for text column in received file
+            sentimentColumn --> Label for sentiment column in received file
+
+DESCRIPTION
+    This function receives the .csv file to be added as an option 
+    in the datasets list, the text column in that dataset, and the 
+    sentiment column in that dataset, saves the received file, 
+    updates the list of datasets in the Analyzer class if that file
+    has not already been imported, adds the column information to 
+    the importedDatasetColumns dictionary in the Analyzer class, 
+    and eiher returns the name of the file without the extension if
+    the file is a .csv file or returns a message stating the .csv file
+    requirement.       
+"""
 @app.route('/uploadFile', methods=['POST'])
 def upload():
     file = request.files['file']
@@ -30,28 +54,31 @@ def upload():
     else:
         return jsonify("Invalid filetype, upload .csv")
 
-# @app.before_request
-# def initialize():
-#     if "initialized" not in session:
-#         session["datasetChoice"] = "AirlineReviews"
-#         session["modelType"] = "LogisticRegression"
-#         session["initialized"] = True
+"""
+predictText()
 
-#         g.a = Analyzer("AirlineReviews", "LogisticRegression", "text", "airline_sentiment")
-#     else:
-#         print("already initialized")
+NAME
+    predictText() - Function that handles model generation 
+                    and predictions
 
+SYNOPSIS
+    Response upload()
+        HTTP args:
+            datasetChoice --> Dataset chosen for analysis
+            modelType     --> Model chosen for analysis
+            text          --> Text to be analyzed
+
+DESCRIPTION
+    This function takes in the choice of dataset, choice of 
+    model, and the text sample, generates the model based on
+    those specifications, and returns the jsonified prediction
+    of the sentiment of that text sample.
+"""
 @app.route('/predict')
 def predictText():
     datasetChoice = request.args.get('datasetChoice')
     modelType = request.args.get('modelType')
     text = request.args.get('text')
-
-    result = {
-        "datasetChoice": datasetChoice,
-        "modelType": modelType,
-        "text": text
-    }
 
     # if("initialized" in session):
     #     if(session["modelType"] != modelType or session["datasetChoice"] != datasetChoice):

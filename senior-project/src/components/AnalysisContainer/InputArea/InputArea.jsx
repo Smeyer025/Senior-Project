@@ -11,7 +11,11 @@ import "./InputArea.css";
  *    InputArea() - Text box for user input
  * 
  * SYNOPSIS
- *    React.JSX.Element InputArea()
+ *    React.JSX.Element InputArea(props)
+ *      props --> properties
+ *          props.value --> Current text in box
+ *          props.onChange --> The function that triggers when a new value
+ *                             is selected from the menu
  * 
  * DESCRIPTION
  *    This function exports the text box that the user

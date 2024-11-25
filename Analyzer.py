@@ -20,7 +20,7 @@ class Analyzer:
     currBalance = False
 
     """
-    Model::__init__()
+    Analyzer::__init__()
 
     NAME
         Analyzer::__init__() - Constructor for Analyzer Class

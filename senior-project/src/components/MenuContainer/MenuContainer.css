@@ -1,3 +1,10 @@
+/*
+.MenuElement styling
+Overview:
+    Solid black rounded border, lighter grey
+    background color, slight padding on the 
+    right to ensure even spacing
+*/
 .MenuElement {
     display: inline-block;
     text-align: center;
@@ -15,11 +22,21 @@
     aspect-ratio: 3/1;
 }
 
+/*
+.Title styling
+Overview:
+    Text in center, small border below
+*/
 .Title {
     text-align: center;
     margin-bottom: -1rem;
 }
 
+/*
+.MenuBackground styling
+Overview:
+    Light grey background, solid black rounded border
+*/
 .MenuBackground {
     text-align: center;
     padding: 1rem;
@@ -35,6 +52,13 @@
     border-width: 1px;
 }
 
+/*
+.MenuContainer styling
+Overview:
+    Aligned in center, margin left to
+    offset extra margin right from 
+    .MenuElement
+*/
 .MenuContainer {
     text-align: center;
     margin-left: 2%;

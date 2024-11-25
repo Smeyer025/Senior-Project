@@ -12,6 +12,10 @@
  * 
  * SYNOPSIS
  *    React.JSX.Element SubmitButton()
+ *      props --> properties
+ *          props.onClick  --> The function that triggers when the 
+ *                             button is clicked
+ *          props.children --> The text to be displayed on the button
  * 
  * DESCRIPTION
  *    This function exports the button that triggers the 

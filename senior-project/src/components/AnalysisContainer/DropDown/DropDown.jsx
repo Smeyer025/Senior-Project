@@ -3,18 +3,21 @@
  */
 
 import "./DropDown.css";
-import { useState } from 'react';
 
 /**
  * DropDown()
  * 
  * NAME
- *    DropDown() - Handles layout for input elements
+ *    DropDown() - Handles layout for dropdown elements
  * 
  * SYNOPSIS
  *    React.JSX.Element DropDown(props)
  *      props --> properties
- *          props.type --> Contains type of menu to output in dropdown menu
+ *          props.type     --> The type of menu to output in dropdown menu
+ *          props.value    --> The currently selected menu item
+ *          props.onChange --> The function that triggers when a new value
+ *                             is selected from the menu
+ *          props.list     --> The array of data to output in the menu
  * 
  * DESCRIPTION
  *    This function exports a modular dropdown menu, that either

@@ -5,7 +5,6 @@
 import Header from "./components/Header/Header";
 import AnalysisContainer from "./components/AnalysisContainer/AnalysisContainer";
 import MenuContainer from "./components/MenuContainer/MenuContainer";
-import bgpng from './assets/bg.png';
 
 /**
  * App()

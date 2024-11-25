@@ -4,6 +4,19 @@
 
 import "./OutputContainer.css";
 
+/**
+ * OutputContainer()
+ * 
+ * NAME
+ *    OutputContainer() - Handles layout for output from analysis
+ * 
+ * SYNOPSIS
+ *    React.JSX.Element DropDown(props)
+ *      props --> properties
+ *          props.children --> Text to be shown in OutputContainer
+ * 
+ * DESCRIPTION
+ */
 export default function OutputContainer(props) {
     const determineColor = (children) => {
         console.log(`children: ${children}`);

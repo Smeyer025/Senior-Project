@@ -1,6 +1,19 @@
 import MenuElement from "./MenuElement/MenuElement";
 import "./MenuContainer.css";
 
+/**
+ * MenuContainer()
+ * 
+ * NAME
+ *    MenuContainer() - Handles layout for performance metrics buttons
+ * 
+ * SYNOPSIS
+ *    React.JSX.Element MenuContainer()
+ * 
+ * DESCRIPTION
+ *    This function exports a grid of MenuElements that make up 
+ *    the performance metrics menu
+ */
 export default function MenuContainer() {
     return (
         <>
