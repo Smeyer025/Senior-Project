@@ -19,6 +19,8 @@ class Analyzer:
     currNeutLabel = ""
     currBalance = False
 
+    ana = "ana not initialized yet"
+
     """
     Analyzer::__init__()
 

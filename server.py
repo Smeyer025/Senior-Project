@@ -1,8 +1,6 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
-from flask import session
-from flask import g
 from flask_cors import CORS
 from Analyzer import Analyzer
 import os
@@ -12,6 +10,27 @@ app = Flask(__name__)
 app.secret_key = "ei3r988fe98j2nu90f90ioncxjnjwnljowdjoi"
 
 CORS(app)
+
+def makeReadable(arr, map=True, heading="", matrix=False):
+    arrAsStr = f""
+    labels = [Analyzer.ana.currPosLabel, Analyzer.ana.currNeutLabel, Analyzer.ana.currNegLabel]
+    idx = 0
+
+    for elem in arr:
+        if matrix == False:
+            if map:
+                arrAsStr = arrAsStr + f"{labels[idx]}: {elem:.2f}, "
+            else:
+                arrAsStr = arrAsStr + f"{elem:.2f}, "
+            idx = idx + 1
+        else:
+            arrAsStr = arrAsStr + f"["
+            for subElem in elem:
+                arrAsStr = arrAsStr + f"{subElem}, "
+            arrAsStr = arrAsStr[:-2]
+            arrAsStr = arrAsStr + f"]," + "\n"
+        
+    return (heading + arrAsStr[:-2])
 
 """
 upload()
@@ -80,35 +99,53 @@ def predictText():
     modelType = request.args.get('modelType')
     text = request.args.get('text')
 
-    # if("initialized" in session):
-    #     if(session["modelType"] != modelType or session["datasetChoice"] != datasetChoice):
-    #         print("previous: " + session["modelType"])
-    #         print("previous: " + session["datasetChoice"])
-    #         print("new: " + modelType)
-    #         print("new: " + datasetChoice)
-    #         print("current: " + g.a.currModelType)
-
-    #         session["modelType"] = modelType
-    #         session["datasetChoice"] = datasetChoice
-    #         session["initialized"] = True
-
+    # Analyzer.ana = Analyzer("AirlineReviews", "LogisticRegression", "text", "airline_sentiment")
     if (datasetChoice == "SocialMedia"):
-        g.a = Analyzer(datasetChoice, modelType, "clean_text", "category")
+        Analyzer.ana = Analyzer(datasetChoice, modelType, "clean_text", "category")
     elif (datasetChoice == "AirlineReviews"):
-        g.a = Analyzer(datasetChoice, modelType, "text", "airline_sentiment")
+        Analyzer.ana = Analyzer(datasetChoice, modelType, "text", "airline_sentiment")
     elif (datasetChoice == "DrugReviews"):
-        g.a = Analyzer(datasetChoice, modelType, "review", "rating") 
+        Analyzer.ana = Analyzer(datasetChoice, modelType, "review", "rating") 
     elif (datasetChoice == "HotelReviews"):
-        g.a = Analyzer(datasetChoice, modelType, "reviews.text", "reviews.rating")
+        Analyzer.ana = Analyzer(datasetChoice, modelType, "reviews.text", "reviews.rating")
     elif (datasetChoice == "MovieReviews"):
-        g.a = Analyzer(datasetChoice, modelType, "review", "sentiment")
+        Analyzer.ana = Analyzer(datasetChoice, modelType, "review", "sentiment")
     else:
         if datasetChoice in Analyzer.importedDatasetColumns.keys():
-            g.a = Analyzer(datasetChoice, modelType, Analyzer.importedDatasetColumns[datasetChoice][0], Analyzer.importedDatasetColumns[datasetChoice][1])
+            Analyzer.ana = Analyzer(datasetChoice, modelType, Analyzer.importedDatasetColumns[datasetChoice][0], Analyzer.importedDatasetColumns[datasetChoice][1])
         else:
             raise Exception("Missing or invalid entered columns for this dataset")
 
-    return jsonify(g.a.predict(text))
+    print("After: ", Analyzer.ana.currModelType)
+    return jsonify(Analyzer.ana.predict(text))
+
+@app.route('/accuracy')
+def accuracy():
+    return jsonify(Analyzer.ana.currModel.accuracy())
+
+@app.route('/precision')
+def precision():
+    return jsonify(makeReadable(Analyzer.ana.currModel.precision().tolist()))
+
+@app.route('/recall')
+def recall():
+    return jsonify(makeReadable(Analyzer.ana.currModel.recall().tolist()))
+
+@app.route('/f1score')
+def f1score():
+    return jsonify(makeReadable(Analyzer.ana.currModel.f1_score().tolist()))
+
+@app.route('/hamming_loss')
+def hamming():
+    return jsonify(Analyzer.ana.currModel.hamming_loss())
+
+@app.route('/kfold')
+def kfold():
+    return jsonify(makeReadable(Analyzer.ana.currModel.kfold().tolist(), map=False, heading="MSE: "))
+
+@app.route('/confusion_matrix')
+def cm():
+    return jsonify(makeReadable(Analyzer.ana.currModel.confusion_matrix().tolist(), heading="Confusion Matrix: ", matrix=True))
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

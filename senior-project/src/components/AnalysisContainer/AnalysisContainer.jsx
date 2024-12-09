@@ -48,14 +48,14 @@ export default function AnalysisContainer() {
     const [selectedValue1, setSelectedValue1] = useState('Logistic Regression');
     const [selectedValue2, setSelectedValue2] = useState('Airline Reviews');
     const [file, setFile] = useState();
-    const [output, setOutput] = useState('Output');
+    const [output, setOutput] = useState('Sentiment Output');
 
     const handleChange1 = (event) => {
         const value = event.target.value;
         setSelectedValue1(value);
         //setText(`Model selected: ${value}`);
         console.log(value);
-        setOutput("Output");
+        setOutput("Sentiment Output");
     };
 
     const handleChange2 = (event) => {
@@ -69,13 +69,13 @@ export default function AnalysisContainer() {
         else {
             setSelectedValue2(event);
         }
-        setOutput("Output");
+        setOutput("Sentiment Output");
     };
 
     const handleInput = (event) => {
         const value = event.target.value;
         setText(value);
-        setOutput("Output");
+        setOutput("Sentiment Output");
     };
 
     const handleClick = async () => {
@@ -100,7 +100,7 @@ export default function AnalysisContainer() {
         var file = event.target.files[0];
         setFile(file);
         console.log(file.name);
-        handleOutput("Output");
+        handleOutput("Sentiment Output");
     }
 
     const handleSubmitFile = async (event) => {

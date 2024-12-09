@@ -1,4 +1,6 @@
 import MenuElement from "./MenuElement/MenuElement";
+import OutputContainer from "../OutputContainer/OutputContainer";
+import { useState } from "react";
 import "./MenuContainer.css";
 
 /**
@@ -15,27 +17,35 @@ import "./MenuContainer.css";
  *    the performance metrics menu
  */
 export default function MenuContainer() {
+    const [output, setOutput] = useState('Menu Output');
+
+    const handleClicks = async (elem) => {
+        setOutput("Loading...");
+        try {
+            const response = await fetch(`http://127.0.0.1:5000/${elem}`)
+            const data = await response.json();
+            setOutput(data);
+        } catch (error) {
+            console.error('Error in data fetch: ', error);
+            setOutput("Error, check console");
+        }
+    }
+
     return (
         <>
             <div className="MenuBackground">
-                <MenuElement className="Title"><h2>Performance Metrics</h2></MenuElement>
+                <MenuElement className="Title"><h3>Performance Metrics</h3></MenuElement>
                 <div className="MenuContainer">
-                    <MenuElement className="MenuElement"></MenuElement>
-                    <MenuElement className="MenuElement"></MenuElement>
-                    <MenuElement className="MenuElement"></MenuElement>
-                </div>
-                <div className="MenuContainer">
-                    <MenuElement className="MenuElement"></MenuElement>
-                    <MenuElement className="MenuElement"></MenuElement>
-                    <MenuElement className="MenuElement"></MenuElement>
-                </div>
-                <div className="MenuContainer">
-                    <MenuElement className="MenuElement"></MenuElement>
-                    <MenuElement className="MenuElement"></MenuElement>
-                    <MenuElement className="MenuElement"></MenuElement>
+                    <MenuElement className="MenuElement" onClick={() => handleClicks("accuracy")}>Accuracy</MenuElement>
+                    <MenuElement className="MenuElement" onClick={() => handleClicks("precision")}>Precision</MenuElement>
+                    <MenuElement className="MenuElement" onClick={() => handleClicks("recall")}>Recall</MenuElement>
+                    <MenuElement className="MenuElement" onClick={() => handleClicks("f1score")}>F1 Score</MenuElement>
+                    <MenuElement className="MenuElement" onClick={() => handleClicks("hamming_loss")}>Hamming loss</MenuElement>
+                    <MenuElement className="MenuElement" onClick={() => handleClicks("kfold")}>Run K-Fold Cross Validation</MenuElement>
+                    <MenuElement className="MenuElement" onClick={() => handleClicks("confusion_matrix")}>Output Confusion Matrix</MenuElement>
                 </div>
             </div>
-
+            <OutputContainer>{output}</OutputContainer>
         </>
     );
 }

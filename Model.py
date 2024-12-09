@@ -5,8 +5,8 @@
 
 import numpy as np
 import pandas as pd
-import matplotlib as plt
 import seaborn as sns
+import matplotlib.pyplot as plt
 import re
 from nltk.corpus import stopwords
 from pandas.api.types import is_string_dtype
@@ -14,23 +14,27 @@ from pandas.api.types import is_numeric_dtype
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score,classification_report
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, hamming_loss
 from sklearn.metrics import confusion_matrix
 from sklearn import svm
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import VotingClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import cross_val_score
 
 class Model:
     datasetChoice = ""
     modelType = ""
     df = pd.DataFrame()
     model = "Model"
+    x = ""
+    y = ""
     x_train = ""
     x_test = ""
     y_train = ""
     y_test = ""
     vectorizer = ""
+    x_vec = ""
     x_train_vec = ""
     x_test_vec = ""
     y_pred = ""
@@ -83,14 +87,15 @@ class Model:
     """
     def generateModel(self, a_textColumn, a_sentimentColumn):
         #Split data into x and y values for Model
-        x = self.df[a_textColumn]
-        y = self.df[a_sentimentColumn]
+        self.x = self.df[a_textColumn]
+        self.y = self.df[a_sentimentColumn]
 
         #Split data into training data (70%) and test data (30%)
-        self.x_train,self.x_test,self.y_train,self.y_test=train_test_split(x,y,test_size=0.3)
+        self.x_train,self.x_test,self.y_train,self.y_test=train_test_split(self.x,self.y,test_size=0.3)
 
         #Make vectorizer, fit data to it
         self.vectorizer = CountVectorizer()
+        self.x_vec = self.vectorizer.fit_transform(self.x)
         self.x_train_vec = self.vectorizer.fit_transform(self.x_train)
         self.x_test_vec = self.vectorizer.transform(self.x_test)
 
@@ -285,7 +290,34 @@ class Model:
         if a_balance:
             self.df = self.balance(a_sentimentColumn, a_posLabel, a_negLabel, a_neutLabel)
         return self.df
+
+    def accuracy(self):
+        self.y_pred = self.model.predict(self.x_test_vec)
+        return accuracy_score(self.y_test, self.y_pred)
     
+    def precision(self):
+        self.y_pred = self.model.predict(self.x_test_vec)
+        return precision_score(self.y_test, self.y_pred, average=None)
+    
+    def recall(self):
+        self.y_pred = self.model.predict(self.x_test_vec)
+        return recall_score(self.y_test, self.y_pred, average=None)
+    
+    def f1_score(self):
+        self.y_pred = self.model.predict(self.x_test_vec)
+        return f1_score(self.y_test, self.y_pred, average=None)
+    
+    def hamming_loss(self): 
+        self.y_pred = self.model.predict(self.x_test_vec)
+        return hamming_loss(self.y_test, self.y_pred)
+
+    def kfold(self):
+        return (cross_val_score(self.model, self.x_vec, self.y, cv=5))
+
+    def confusion_matrix(self):
+        self.y_pred = self.model.predict(self.x_test_vec)
+        return confusion_matrix(self.y_test, self.y_pred)
+
     """
     Model::test()
 
@@ -309,5 +341,14 @@ class Model:
         accuracy = accuracy_score(model.y_test, model.y_pred)
         print("accuracy", accuracy)
         heatmap = sns.heatmap(confusion_matrix(model.y_test,model.y_pred))
-        fig = heatmap.get_figure()
-        fig.savefig("out.png")
+        plt.savefig("out.png")
+
+# model = Model("SocialMedia", "LogisticRegression", "clean_text", "category")
+# print(f"Accuracy: {model.accuracy()}")
+# print(f"Precision: {model.precision()}")
+# print(f"Recall: {model.recall()}")
+# print(f"f1 score: {model.f1_score()}")
+# print(f"hamming_loss: {model.hamming_loss()}")
+# print(f"cross_val: {model.kfold()}")
+# print(f"confusion_matrix: {model.confusion_matrix()}")
+# model.cm_heatmap()

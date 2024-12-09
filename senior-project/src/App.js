@@ -22,11 +22,13 @@ import MenuContainer from "./components/MenuContainer/MenuContainer";
 function App() {
   return (
     <html>
+      <body>
       <Header>
         Sentiment Analysis
       </Header>
       <AnalysisContainer />
       <MenuContainer />
+      </body>
     </html>
   );
 }
