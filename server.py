@@ -13,7 +13,10 @@ CORS(app)
 
 def makeReadable(arr, map=True, heading="", matrix=False):
     arrAsStr = f""
-    labels = [Analyzer.ana.currPosLabel, Analyzer.ana.currNeutLabel, Analyzer.ana.currNegLabel]
+    if len(arr) == 2:
+        labels = [Analyzer.ana.currPosLabel, Analyzer.ana.currNegLabel]
+    else:
+        labels = [Analyzer.ana.currPosLabel, Analyzer.ana.currNeutLabel, Analyzer.ana.currNegLabel]
     idx = 0
 
     for elem in arr:
