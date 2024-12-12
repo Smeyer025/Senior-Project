@@ -22,7 +22,7 @@ export default function MenuContainer() {
     const handleClicks = async (elem) => {
         setOutput("Loading...");
         try {
-            const response = await fetch(`http://127.0.0.1:5000/${elem}`)
+            const response = await fetch(`http://localhost:5000/${elem}`)
             const data = await response.json();
             setOutput(data);
         } catch (error) {
@@ -41,7 +41,7 @@ export default function MenuContainer() {
                     <MenuElement className="MenuElement" onClick={() => handleClicks("recall")}>Recall</MenuElement>
                     <MenuElement className="MenuElement" onClick={() => handleClicks("f1score")}>F1 Score</MenuElement>
                     <MenuElement className="MenuElement" onClick={() => handleClicks("hamming_loss")}>Hamming loss</MenuElement>
-                    <MenuElement className="MenuElement" onClick={() => handleClicks("kfold")}>Run K-Fold Cross Validation</MenuElement>
+                    <MenuElement className="MenuElement" onClick={() => handleClicks("kfold")}>Run 5-Fold Cross Validation</MenuElement>
                     <MenuElement className="MenuElement" onClick={() => handleClicks("confusion_matrix")}>Output Confusion Matrix</MenuElement>
                 </div>
             </div>

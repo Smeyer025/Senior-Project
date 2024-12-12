@@ -81,9 +81,9 @@ export default function AnalysisContainer() {
     const handleClick = async () => {
         setOutput("Loading...");
         try {
-            const response = await fetch(`http://127.0.0.1:5000/predict?datasetChoice=${selectedValue2.replaceAll(" ", "")}&modelType=${selectedValue1.replaceAll(" ", "")}&text="${text}"`)
+            const response = await fetch(`http://localhost:5000/predict?datasetChoice=${selectedValue2.replaceAll(" ", "")}&modelType=${selectedValue1.replaceAll(" ", "")}&text="${text}"`)
             const data = await response.json();
-            console.log(`http://127.0.0.1:5000/predict?datasetChoice=${selectedValue2.replaceAll(" ", "")}&modelType=${selectedValue1.replaceAll(" ", "")}&text="${text}"`)
+            console.log(`http://localhost:5000/predict?datasetChoice=${selectedValue2.replaceAll(" ", "")}&modelType=${selectedValue1.replaceAll(" ", "")}&text="${text}"`)
 
             handleOutput(data);
         } catch (error) {
@@ -117,7 +117,7 @@ export default function AnalysisContainer() {
         }
 
         try {
-            const response = await fetch(`http://127.0.0.1:5000/uploadFile?text="${splitAnswers[0].replaceAll(" ", "")}"&sentiment="${splitAnswers[1].replaceAll(" ", "")}"`, {
+            const response = await fetch(`http://localhost:5000/uploadFile?text="${splitAnswers[0].replaceAll(" ", "")}"&sentiment="${splitAnswers[1].replaceAll(" ", "")}"`, {
                 method: 'POST',
                 body: form
             })
