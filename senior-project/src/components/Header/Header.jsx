@@ -20,6 +20,9 @@ import './Header.css';
  * DESCRIPTION
  *    This function exports the Header layout as a component
  *    for it to be used in the App component
+ * 
+ * RETURNS 
+ *    Returns the Header jsx element
  */
 export default function Header(props){
     return (

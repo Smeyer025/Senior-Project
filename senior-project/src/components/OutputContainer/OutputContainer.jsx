@@ -11,18 +11,22 @@ import "./OutputContainer.css";
  *    OutputContainer() - Handles layout for output from analysis
  * 
  * SYNOPSIS
- *    React.JSX.Element DropDown(props)
- *      props --> properties
- *          props.children --> Text to be shown in OutputContainer
+ *    React.JSX.Element OutputContainer(a_props)
+ *      a_props --> properties
+ *          a_props.children --> Text to be shown in OutputContainer
  * 
  * DESCRIPTION
+ *    This function creates a container for output
+ * 
+ * RETURNS 
+ *    Returns jsx element for output container
  */
-export default function OutputContainer(props) {
-    const determineColor = (children) => {
-        console.log(`children: ${children}`);
-        if (children == "positive") {
+export default function OutputContainer(a_props) {
+    const determineColor = (a_children) => {
+        console.log(`children: ${a_children}`);
+        if (a_children == "positive") {
             return "green";
-        } else if (children == "negative") {
+        } else if (a_children == "negative") {
             return 'red';
         } else {
             return 'black';
@@ -31,7 +35,7 @@ export default function OutputContainer(props) {
 
     return (
         <div className="OC">
-            <h1 style={{color: determineColor(props.children)}}>{props.children}</h1>
+            <h1 style={{color: determineColor(a_props.children)}}>{a_props.children}</h1>
         </div>
     );
 };

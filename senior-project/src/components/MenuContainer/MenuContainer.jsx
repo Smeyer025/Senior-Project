@@ -1,3 +1,7 @@
+/**
+ * MenuContainer Component: Container for all the MenuElements
+ */
+
 import MenuElement from "./MenuElement/MenuElement";
 import OutputContainer from "../OutputContainer/OutputContainer";
 import { useState } from "react";
@@ -15,6 +19,9 @@ import "./MenuContainer.css";
  * DESCRIPTION
  *    This function exports a grid of MenuElements that make up 
  *    the performance metrics menu
+ * 
+ * RETURNS 
+ *    Returns menu container jsx element
  */
 export default function MenuContainer() {
     const [output, setOutput] = useState('Menu Output');

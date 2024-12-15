@@ -5,20 +5,37 @@
 
 import Model
 
+"""
+Analyzer
+
+NAME
+    Analyzer: Analyzer class; acts as liaison between frontend and Model class
+
+SYNOPSIS
+    __init__(): Constructor
+    setModel(): Set new model type, create new model
+    setDataset(): Set new dataset choice, create new model
+    predict(): Use model to make a prediction 
+
+DESCRIPTION
+    This class provides functionality that controls the Model class and ensures
+    the frontend can access it easily. 
+"""
 class Analyzer:
     DATASETS = ["SocialMedia", "AirlineReviews", "DrugReviews", "HotelReviews", "MovieReviews"]
     MODEL_TYPES = ["LogisticRegression", "SupportVectorMachine", "RandomForest", "KNearestNeighbors", "VotingClassifier"]
     importedDatasetColumns = {}
-    currModel = ""
-    currDataset = ""
-    currModelType = ""
-    currTextCol = ""
-    currSentCol = ""
-    currPosLabel = ""
-    currNegLabel = ""
-    currNeutLabel = ""
-    currBalance = False
+    m_currModel = ""
+    m_currDataset = ""
+    m_currModelType = ""
+    m_currTextCol = ""
+    m_currSentCol = ""
+    m_currPosLabel = ""
+    m_currNegLabel = ""
+    m_currNeutLabel = ""
+    m_currBalance = False
 
+    # Static Analyzer object
     ana = "ana not initialized yet"
 
     """
@@ -49,15 +66,15 @@ class Analyzer:
         if a_modelType not in self.MODEL_TYPES:
             raise Exception("Invalid model type chosen")
         
-        self.currDataset = a_datasetChoice
-        self.currModelType = a_modelType
-        self.currTextCol = a_textColumn
-        self.currSentCol = a_sentimentColumn
-        self.currPosLabel = a_posLabel
-        self.currNegLabel = a_negLabel
-        self.currNeutLabel = a_neutLabel
-        self.currBalance = a_balance
-        self.currModel = Model.Model(self.currDataset, self.currModelType, self.currTextCol, self.currSentCol, self.currPosLabel, self.currNegLabel, self.currNeutLabel, self.currBalance)
+        self.m_currDataset = a_datasetChoice
+        self.m_currModelType = a_modelType
+        self.m_currTextCol = a_textColumn
+        self.m_currSentCol = a_sentimentColumn
+        self.m_currPosLabel = a_posLabel
+        self.m_currNegLabel = a_negLabel
+        self.m_currNeutLabel = a_neutLabel
+        self.m_currBalance = a_balance
+        self.m_currModel = Model.Model(self.m_currDataset, self.m_currModelType, self.m_currTextCol, self.m_currSentCol, self.m_currPosLabel, self.m_currNegLabel, self.m_currNeutLabel, self.m_currBalance)
         
     """
     Model::setModel()
@@ -78,8 +95,8 @@ class Analyzer:
         if a_modelType not in self.MODEL_TYPES:
             raise Exception("Invalid model type chosen")
         
-        self.currModelType = a_modelType 
-        self.currModel = Model.Model(self.currDataset, self.currModelType, self.currTextCol, self.currSentCol, self.currPosLabel, self.currNegLabel, self.currNeutLabel, self.currBalance)
+        self.m_currModelType = a_modelType 
+        self.m_currModel = Model.Model(self.m_currDataset, self.m_currModelType, self.m_currTextCol, self.m_currSentCol, self.m_currPosLabel, self.m_currNegLabel, self.m_currNeutLabel, self.m_currBalance)
 
     """
     Model::setDataset()
@@ -105,12 +122,12 @@ class Analyzer:
         if a_datasetChoice not in self.DATASETS:
             raise Exception("Invalid dataset chosen")
         
-        self.currDataset = a_datasetChoice
-        self.currPosLabel = a_posLabel
-        self.currNegLabel = a_negLabel
-        self.currNeutLabel = a_neutLabel
-        self.currBalance = a_balance
-        self.currModel = Model.Model(self.currDataset, self.currModelType, self.currTextCol, self.currSentCol, self.currPosLabel, self.currNegLabel, self.currNeutLabel, self.currBalance)
+        self.m_currDataset = a_datasetChoice
+        self.m_currPosLabel = a_posLabel
+        self.m_currNegLabel = a_negLabel
+        self.m_currNeutLabel = a_neutLabel
+        self.m_currBalance = a_balance
+        self.m_currModel = Model.Model(self.m_currDataset, self.m_currModelType, self.m_currTextCol, self.m_currSentCol, self.m_currPosLabel, self.m_currNegLabel, self.m_currNeutLabel, self.m_currBalance)
 
     """
     Model::predict()
@@ -126,6 +143,9 @@ class Analyzer:
     DESCRIPTION
         This function takes in the type of model to be changed to, ensures it's in the list of acceptable models,
         updates the current model type in the Analyzer object, and generates a new model.
+
+    RETURNS
+        String containing the prediction the model made about the tone of the text sample (positive, neutral, negative)
     """
     def predict(self, a_textToPredict):
-        return self.currModel.predict(a_textToPredict)
+        return self.m_currModel.predict(a_textToPredict)

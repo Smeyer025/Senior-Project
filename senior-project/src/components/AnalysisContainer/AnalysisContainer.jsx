@@ -42,6 +42,9 @@ var Datasets = [
  *    input element that takes in an uploaded file, the button
  *    that triggers the import and makes the new dataset available
  *    and the submit button
+ * 
+ * RETURNS
+ *    Returns the analysis container jsx element
  */
 export default function AnalysisContainer() {    
     const [text, setText] = useState("Enter your text here");
@@ -50,30 +53,26 @@ export default function AnalysisContainer() {
     const [file, setFile] = useState();
     const [output, setOutput] = useState('Sentiment Output');
 
-    const handleChange1 = (event) => {
-        const value = event.target.value;
+    const handleChange1 = (a_event) => {
+        const value = a_event.target.value;
         setSelectedValue1(value);
-        //setText(`Model selected: ${value}`);
-        console.log(value);
         setOutput("Sentiment Output");
     };
 
-    const handleChange2 = (event) => {
-        console.log(Object.hasOwn(event, "target"));
-        if(Object.hasOwn(event, "target")) {
-            const value = event.target.value;
+    const handleChange2 = (a_event) => {
+        console.log(Object.hasOwn(a_event, "target"));
+        if(Object.hasOwn(a_event, "target")) {
+            const value = a_event.target.value;
             setSelectedValue2(value);
-            //setText(`Dataset selected: ${value}`);
-            console.log(value);
         }
         else {
-            setSelectedValue2(event);
+            setSelectedValue2(a_event);
         }
         setOutput("Sentiment Output");
     };
 
-    const handleInput = (event) => {
-        const value = event.target.value;
+    const handleInput = (a_event) => {
+        const value = a_event.target.value;
         setText(value);
         setOutput("Sentiment Output");
     };
@@ -96,15 +95,15 @@ export default function AnalysisContainer() {
         setOutput(prediction);
     }
 
-    const handleFile = (event) => {
-        var file = event.target.files[0];
+    const handleFile = (a_event) => {
+        var file = a_event.target.files[0];
         setFile(file);
         console.log(file.name);
         handleOutput("Sentiment Output");
     }
 
-    const handleSubmitFile = async (event) => {
-        event.preventDefault();
+    const handleSubmitFile = async (a_event) => {
+        a_event.preventDefault();
 
         const form = new FormData();
         form.append('file', file);

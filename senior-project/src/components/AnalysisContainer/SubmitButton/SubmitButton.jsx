@@ -12,17 +12,20 @@
  * 
  * SYNOPSIS
  *    React.JSX.Element SubmitButton()
- *      props --> properties
- *          props.onClick  --> The function that triggers when the 
+ *      a_props --> properties
+ *          a_props.onClick  --> The function that triggers when the 
  *                             button is clicked
- *          props.children --> The text to be displayed on the button
+ *          a_props.children --> The text to be displayed on the button
  * 
  * DESCRIPTION
  *    This function exports the button that triggers the 
  *    analysis based on chosen parameters and inputted text
+ * 
+ * RETURNS
+ *    Returns the submit button jsx element
  */
-export default function SubmitButton(props) {
+export default function SubmitButton(a_props) {
     return (
-        <button onClick={props.onClick} className="inline">{props.children}</button>
+        <button onClick={a_props.onClick} className="inline">{a_props.children}</button>
     );
 }
