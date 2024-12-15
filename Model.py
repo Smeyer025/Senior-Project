@@ -5,11 +5,8 @@
 
 import numpy as np
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 import re
 from nltk.corpus import stopwords
-from pandas.api.types import is_string_dtype
 from pandas.api.types import is_numeric_dtype
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
