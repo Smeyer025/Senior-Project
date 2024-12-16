@@ -269,7 +269,7 @@ RETURNS
 """
 @app.route('/kfold')
 def kfold():
-    return jsonify(makeReadable(Analyzer.ana.m_currModel.kfold().tolist(), a_map=False, a_heading="MSE: "))
+    return jsonify(makeReadable(Analyzer.ana.m_currModel.kfold().tolist(), a_map=False, a_heading="Cross Validation Scores: "))
 
 """
 confusion_matrix()
