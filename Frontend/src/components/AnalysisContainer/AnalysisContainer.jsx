@@ -112,6 +112,9 @@ export default function AnalysisContainer() {
         var splitAnswers = [];
         while (splitAnswers.length != 2) {
             var promptAnswer = window.prompt("Enter the text column and the sentiment column, separated by a comma. (ex: review,sentiment)");
+            if (promptAnswer == null) {
+                return;
+            }
             var splitAnswers = promptAnswer.split(',');
         }
 
