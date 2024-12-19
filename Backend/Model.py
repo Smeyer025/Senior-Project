@@ -422,10 +422,10 @@ class Model:
 
     DESCRIPTION
         This function runs k-fold cross validation where k = 5 and outputs the 
-        Mean Squared Error for each fold.
+        Cross Validation Score for each fold.
 
     RETURNS
-        Returns the the Mean Squared Error for each fold
+        Returns the the Cross Validation Score for each fold
     """
     def kfold(self):
         return (cross_val_score(self.m_model, self.m_x_vec, self.m_y, cv=5))
